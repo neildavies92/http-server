@@ -18,11 +18,12 @@ request_lines = request_text.splitlines()
 if request_lines:
     request_line = request_lines[0]
     method, path, version = request_line.split()
-    print(f"Method: {method}, Path: {path}, Version: {version}")
 
 response = (
     f"{version} 200 OK\r\n"
     f"Requested path: {path}\r\n"
 )
+print(response)
+
 conn.sendall(response.encode('utf-8'))
 s.close()
