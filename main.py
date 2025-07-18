@@ -10,11 +10,10 @@ s.listen(1)
 conn, addr = s.accept()
 print(f"Connection from {addr}\n")
 
-request = conn.recv(1024)
-request_text = request.decode('utf-8')
-print(request_text)
+request = conn.recv(1024).decode('utf-8')
+print(request)
 
-request_lines = request_text.splitlines()
+request_lines = request.splitlines()
 if request_lines:
     request_line = request_lines[0]
     method, path, version = request_line.split()
