@@ -19,10 +19,7 @@ if request_lines:
     request_line = request_lines[0]
     method, path, version = request_line.split()
 
-if path == '/':
-    path = f'/{file}'
-
-if path == f'/{file}':
+if path in ('/', f'/{file}'):
     with open('www/index.html', 'r') as f:
         body = f.read()
     response = (
@@ -31,7 +28,7 @@ if path == f'/{file}':
     )
 else:
     response = (
-        f"{version} File Not Found\r\n\r\n"
+        f"{version} 404 File Not Found\r\n\r\n"
     )
 
 conn.sendall(response.encode('utf-8'))
