@@ -30,10 +30,8 @@ if path == f'/{file}':
         f"{body}"
     )
 else:
-    body = "<h1>400 Bad Request</h1>"
     response = (
-        f"{version} 400 Bad Request\r\n\r\n"
-        f"{body}"
+        f"{version} File Not Found\r\n\r\n"
     )
 
 conn.sendall(response.encode('utf-8'))
