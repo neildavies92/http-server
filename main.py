@@ -48,13 +48,13 @@ def handle_connection(conn):
 
 server_socket = start_server(host, port)
 
-thread = threading.Thread(target=handle_connection, args=(server_socket,))
-thread.start()
-
 if isinstance(server_socket, socket.socket):
     print(f"Server started on {host}:{port}")
 
     while True:
-        handle_connection(server_socket)
+        conn, addr = server_socket.accept()
+        thread = threading.Thread(target=handle_connection, args=(conn,))
+        thread.start()
+        print(thread)
 else:
     print(server_socket)
