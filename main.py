@@ -1,15 +1,19 @@
 import socket
+import threading
 
 HOSTNAME = "localhost"
 PORT = 8000
 FILE = "index.html"
 
 
-def create_socket(host, port):
-    server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server.bind((host, port))
-    server.listen(1)
-    print(f"Listening on http://{host}:{port}...")
+def start_server(host, port):
+    try:
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind((host, port))
+        server.listen(1)
+        print(f"Listening on http://{host}:{port}...")
+    except OSError as e:
+        return f"Error setting up server: {e}"
     return server
 
 
