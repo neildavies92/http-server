@@ -9,7 +9,7 @@ def start_server(host, port):
     try:
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((host, port))
-        server_socket.listen(1)
+        server_socket.listen(5)
         return server_socket
     except Exception as e:
         return f"Error starting server: {e}"
