@@ -3,7 +3,7 @@ import threading
 
 host = "localhost"
 port = 8000
-file = "index.html"
+filename = "index.html"
 
 
 def start_server(host, port):
