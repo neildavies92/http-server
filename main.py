@@ -27,18 +27,31 @@ def handle_request(server):
         request_line = request_lines[0]
         method, path, version = request_line.split()
 
-    if path in ("/", f"/{FILE}"):
-        with open(f"www/{FILE}", "r") as f:
-            body = f.read()
-        response = f"{version} 200 OK\r\n\r\n{body}"
-    else:
+    try:
+        if path in ("/", f"/{FILE}"):
+            with open(f"www/{FILE}", "r") as f:
+                body = f.read()
+            response = f"{version} 200 OK\r\n\r\n{body}"
+    except FileNotFoundError:
         response = f"{version} 404 File Not Found\r\n\r\n"
 
     conn.sendall(response.encode("utf-8"))
     conn.close()
 
 
-server = create_socket(HOSTNAME, PORT)
+def create_thread(handle_request):
+    thread = threading.Thread(target=handle_request)
+    thread.start()
+    print(thread)
+    return thread
+
+
+server = start_server(HOSTNAME, PORT)
 
 while True:
     handle_request(server)
+
+    def handle_connection():
+        handle_request(server)
+
+    create_thread(handle_connection)
