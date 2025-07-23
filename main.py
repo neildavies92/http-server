@@ -13,12 +13,11 @@ def start_server(host, port):
         server_socket.listen(5)
         return server_socket
     except Exception as e:
-        return f"Error starting server: {e}"
+        raise RuntimeError(f"Error starting server: {e}")
 
 
-def handle_connection(server_socket):
-    conn, addr = server_socket.accept()
-    print(f"Connection from {addr}")
+def handle_connection(conn):
+    print(f"Connection from {conn.getpeername()}")
 
     request = conn.recv(1024).decode()
 
@@ -29,12 +28,19 @@ def handle_connection(server_socket):
         _, path, version = request_line.split()
 
     if path == "/":
-        path = f"/{file}"
+        path = f"/{filename}"
 
-    with open(f"www/{file}", "r") as f:
-        body = f.read()
-        response = f"{version} 200 OK\r\n\r\n{body}"
-        print(response)
+    try:
+        # Remove leading slash and use the actual requested path
+        file_path = path.lstrip("/")
+        if not file_path:
+            file_path = filename
+        with open(f"www/{file_path}", "r") as f:
+            body = f.read()
+            response = f"{version} 200 OK\r\n\r\n{body}"
+    except FileNotFoundError:
+        body = "<h1>404 Not Found</h1>"
+        response = f"{version} 404 Not Found\r\n\r\n{body}"
 
     conn.sendall(response.encode())
     conn.close()
