@@ -1,4 +1,5 @@
 import socket
+import threading
 
 host = "localhost"
 port = 8000
@@ -26,6 +27,7 @@ def handle_connection(server_socket):
     if request_lines:
         request_line = request_lines[0]
         _, path, version = request_line.split()
+
     if path == "/":
         path = f"/{file}"
 
@@ -39,6 +41,9 @@ def handle_connection(server_socket):
 
 
 server_socket = start_server(host, port)
+
+thread = threading.Thread(target=handle_connection, args=(server_socket,))
+thread.start()
 
 if isinstance(server_socket, socket.socket):
     print(f"Server started on {host}:{port}")
