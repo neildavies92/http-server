@@ -18,18 +18,13 @@ def start_server(host, port):
 
 def handle_connection(conn):
     print(f"Connection from {conn.getpeername()}")
-
     request = conn.recv(1024).decode()
-
     request_lines = request.splitlines()
-
     if request_lines:
         request_line = request_lines[0]
         _, path, version = request_line.split()
-
     if path == "/":
         path = f"/{filename}"
-
     try:
         filepath = path.lstrip("/")
         if not filepath:
@@ -41,7 +36,6 @@ def handle_connection(conn):
         with open("www/error.html", "r") as f:
             body = f.read()
         response = f"{version} 404 Not Found\r\n\r\n{body}"
-
     conn.sendall(response.encode())
     conn.close()
 
